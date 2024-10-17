@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .player-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="player-container">
+        <h2>Music Player</h2>
+        <audio id="audioPlayer" controls autoplay>
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const chatId = urlParams.get('chat_id');
+        
+        if (chatId) {
+            const audioPlayer = document.getElementById('audioPlayer');
+            audioPlayer.src = `/stream?chat_id=${chatId}`;
+            audioPlayer.play();
+        } else {
+            alert("Please provide a chat_id in the URL");
+        }
+    </script>
+</body>
+</html>
