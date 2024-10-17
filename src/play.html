@@ -6,44 +6,102 @@
     <title>Music Player</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f0f0f0;
+            background-color: #1e1e1e;
+            margin: 0;
         }
         .player-container {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background: #333;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             text-align: center;
+            width: 300px;
+            color: #fff;
         }
-        audio {
-            width: 100%;
-            margin-top: 10px;
+        .player-container h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #f1c40f;
+        }
+        .audio-controls {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .audio-controls button {
+            background-color: #f1c40f;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: #333;
+            font-size: 16px;
+        }
+        .audio-controls button:hover {
+            background-color: #d4ac0d;
         }
     </style>
 </head>
 <body>
     <div class="player-container">
-        <h2>Music Player</h2>
-        <audio id="audioPlayer" controls autoplay>
-            Your browser does not support the audio element.
-        </audio>
+        <h2>Now Playing</h2>
+        <div class="audio-controls">
+            <button onclick="togglePlay()">&#9654;</button>
+        </div>
+        <audio id="audioPlayer" autoplay></audio>
     </div>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const chatId = urlParams.get('chat_id');
-        
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playButton = document.querySelector('.audio-controls button');
+
         if (chatId) {
-            const audioPlayer = document.getElementById('audioPlayer');
             audioPlayer.src = `/stream?chat_id=${chatId}`;
-            audioPlayer.play();
+            fetch(`/state?chat_id=${chatId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'paused') {
+                        audioPlayer.pause();
+                        playButton.innerHTML = '&#9654;';
+                    }
+                });
         } else {
             alert("Please provide a chat_id in the URL");
+        }
+
+        audioPlayer.addEventListener('play', () => {
+            updateState('playing');
+            playButton.innerHTML = '&#10074;&#10074;';
+        });
+
+        audioPlayer.addEventListener('pause', () => {
+            updateState('paused');
+            playButton.innerHTML = '&#9654;';
+        });
+
+        function togglePlay() {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+            } else {
+                audioPlayer.pause();
+            }
+        }
+
+        function updateState(state) {
+            fetch('/state', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ chat_id: chatId, state })
+            });
         }
     </script>
 </body>
