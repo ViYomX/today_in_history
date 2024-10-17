@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .player-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 10px;
+            border: none;
+            background: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="player-container">
+        <h2>Music Player</h2>
+        <audio id="audioPlayer" controls>
+            Your browser does not support the audio element.
+        </audio>
+        <br>
+        <button onclick="loadSong()">Play Music</button>
+    </div>
+
+    <script>
+        async function loadSong() {
+            const chatId = prompt("Enter Chat ID (integer) to play the song:");
+            if (chatId && !isNaN(chatId)) {
+                const audioPlayer = document.getElementById("audioPlayer");
+                audioPlayer.src = `/play?chat_id=${parseInt(chatId)}`;
+                audioPlayer.play();
+            } else {
+                alert("Please enter a valid integer for Chat ID.");
+            }
+        }
+    </script>
+</body>
+</html>
