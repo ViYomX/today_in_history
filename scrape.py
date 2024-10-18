@@ -15,6 +15,8 @@ def scrape_indianage():
     response.raise_for_status()
     soup = BeautifulSoup(response.content, 'html.parser')
     title = soup.find('title').text.strip()
+    if "Today in Indian History - " in title:
+        title = title.replace("Today in Indian History - ", "")
     events = {}
     for box in soup.find_all('div', class_='timeline_box'):
         date = box.find('div', class_='date').text.strip()
