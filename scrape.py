@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
     text = f"<b>{data['title']}</b>"
     for date, info in data["events"].items():
-        text += f"\n\n\n<u>{date}</u>\n\n{info}"
+        text += f"\n\n\n<u>{date}</u>\n{info}"
 
     max_length = 3900
     current_message = ""
