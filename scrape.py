@@ -32,3 +32,9 @@ if __name__ == "__main__":
     file_path = f"today_in_history/{today_date_month}.json"
     with open(file_path, 'w') as json_file:
         json.dump(data, json_file, indent=4)
+
+    text = data["title"]
+    for date, info in data.items()
+        text+=f"\n\n<b><u>{date}</b></u>\n{info}"
+    print(text)
+        
