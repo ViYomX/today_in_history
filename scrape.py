@@ -36,8 +36,11 @@ def send_to_telegram(message):
         "text": message,
         "parse_mode": "HTML"
     }
-    response = requests.post(url, json=payload)
-    response.raise_for_status()
+    try:
+        response = requests.post(url, json=payload)
+        response.raise_for_status()
+    except requests.exceptions.HTTPError:
+        pass
 
 if __name__ == "__main__":
     data = scrape_indianage()
