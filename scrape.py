@@ -63,9 +63,9 @@ if __name__ == "__main__":
     ]
 
     intro_message = random.choice(greetings) + "\n\n"
-    text = f"<b>{data['title']}</b>"
+    text = f"{data['title']}"
     for date, info in data["events"].items():
-        text += f"\n\n📅 <b><u>{date}</u></b>\n📝 {info}"
+        text += f"\n\n<b>{date}</b>\n{info}"
 
     message_to_send = intro_message + text
 
