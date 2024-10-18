@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 import json
+from datetime import datetime
+import pytz
 
 def scrape_indianage():
     url = "https://www.indianage.com/indian_history"
@@ -25,5 +27,15 @@ def scrape_indianage():
         "events": events
     }
 
-    json_data = json.dumps(data, indent=4)
-    return json_data
+    return data
+
+
+if __name__ == "__main__":
+    data = scrape_indianage()
+    india_timezone = pytz.timezone('Asia/Kolkata')
+    india_time = datetime.now(india_timezone)
+    today_date_month = f"{india_time.day}.{india_time.month}"
+
+    file_path = f"today_in_history/{today_date_month}.json"
+    with open(file_path, 'w') as json_file:
+        json.dump(data, json_file, indent=4)
