@@ -25,12 +25,13 @@ jobs:
 
       - name: Run Scraper Script
         run: |
-          python scrape.py
+          python recruitments.py
 
-      - name: Commit and Push Results
-        run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git add today_in_history/
-          git commit -m "Add today's history data"
-          git push
+      - name: Commit and Push Changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Update Today history"
+          commit_options: "--no-verify"
+          repository: .
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
