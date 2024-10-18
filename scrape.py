@@ -20,6 +20,7 @@ def scrape_indianage():
     events = {}
     for box in soup.find_all('div', class_='timeline_box'):
         date = box.find('div', class_='date').text.strip()
+        date = date.replace("-", "\t")
         event = box.find('p').text.strip()
         events[date] = event
     data = {
@@ -51,30 +52,14 @@ if __name__ == "__main__":
     with open(file_path, 'w') as json_file:
         json.dump(data, json_file, indent=4)
 
-    greetings = [
-        "🇮🇳✨ <b>Hello Indians!</b> ✨🇮🇳",
-        "🌟 <b>Namaste India!</b> 🌟",
-        "🙏 <b>Greetings to all Indians!</b> 🙏",
-        "🔥 <b>Hey India!</b> 🔥",
-        "🇮🇳💫 <b>Incredible Indians, rise and shine!</b> 💫🇮🇳",
-        "🎉 <b>What's up, India?!</b> 🎉",
-        "💥 <b>Hello, Proud Indians!</b> 💥",
-        "🌞 <b>Good Day, India!</b> 🌞",
-        "🌟 <b>Salutations to our Indian Heroes!</b> 🌟",
-        "💪 <b>Hey Bharatvasiyon!</b> 💪"
-    ]
-
-    intro_message = random.choice(greetings) + "\n\n"
-    text = f"{data['title']}"
+    text = f"<b><u>{data['title']}</b></u>"
     for date, info in data["events"].items():
-        text += f"\n\n<b>{date}</b>\n{info}"
-
-    message_to_send = intro_message + text
+        text += f"\n\n<u>{date}</u>\n{info}"
 
     max_length = 3900
     current_message = ""
 
-    for line in message_to_send.split("\n"):
+    for line in text.split("\n"):
         if len(current_message) + len(line) + 1 > max_length:
             send_telegram_message(current_message)
             current_message = ""
