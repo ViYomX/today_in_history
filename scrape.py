@@ -34,7 +34,7 @@ if __name__ == "__main__":
     data = scrape_indianage()
     india_timezone = pytz.timezone('Asia/Kolkata')
     india_time = datetime.now(india_timezone)
-    today_date_month = f"{india_time.day}.{india_time.month}"
+    today_date_month = f"{india_time.day}_{india_time.month}"
 
     file_path = f"today_in_history/{today_date_month}.json"
     with open(file_path, 'w') as json_file:
