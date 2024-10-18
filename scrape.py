@@ -27,7 +27,7 @@ def scrape_indianage():
     }
     return data
 
-def send_telegram_message(message):
+def send_to_telegram(message):
     chat_id = os.getenv("CHAT_ID")
     bot_token = os.getenv("BOT_TOKEN")
     url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
@@ -59,9 +59,9 @@ if __name__ == "__main__":
 
     for line in text.split("\n"):
         if len(current_message) + len(line) + 1 > max_length:
-            send_telegram_message(current_message)
+            send_to_telegram(current_message)
             current_message = ""
         current_message += line + "\n"
 
     if current_message:
-        send_telegram_message(current_message)
+        send_to_telegram(current_message)
