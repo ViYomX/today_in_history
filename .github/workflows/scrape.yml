@@ -23,7 +23,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests beautifulsoup4 pytz
 
-      - name: Run Scraper Script
+      - name: Run Scraper Script and Send Telegram Message
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
         run: |
           python scrape.py
 
