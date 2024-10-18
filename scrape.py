@@ -4,6 +4,7 @@ import json
 from datetime import datetime
 import pytz
 import os
+import random
 
 def scrape_indianage():
     url = "https://www.indianage.com/indian_history"
@@ -14,8 +15,6 @@ def scrape_indianage():
     response.raise_for_status()
     soup = BeautifulSoup(response.content, 'html.parser')
     title = soup.find('title').text.strip()
-    if "Today in Indian History" in title:
-        title = title.replace("Today in Indian History", "")
     events = {}
     for box in soup.find_all('div', class_='timeline_box'):
         date = box.find('div', class_='date').text.strip()
@@ -27,7 +26,7 @@ def scrape_indianage():
     }
     return data
 
-def send_to_telegram(message):
+def send_telegram_message(message):
     chat_id = os.getenv("CHAT_ID")
     bot_token = os.getenv("BOT_TOKEN")
     url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
@@ -36,11 +35,8 @@ def send_to_telegram(message):
         "text": message,
         "parse_mode": "HTML"
     }
-    try:
-        response = requests.post(url, json=payload)
-        response.raise_for_status()
-    except requests.exceptions.HTTPError:
-        pass
+    response = requests.post(url, json=payload)
+    response.raise_for_status()
 
 if __name__ == "__main__":
     data = scrape_indianage()
@@ -53,18 +49,34 @@ if __name__ == "__main__":
     with open(file_path, 'w') as json_file:
         json.dump(data, json_file, indent=4)
 
+    greetings = [
+        "🇮🇳✨ <b>Hello Indians!</b> ✨🇮🇳",
+        "🌟 <b>Namaste India!</b> 🌟",
+        "🙏 <b>Greetings to all Indians!</b> 🙏",
+        "🔥 <b>Hey India!</b> 🔥",
+        "🇮🇳💫 <b>Incredible Indians, rise and shine!</b> 💫🇮🇳",
+        "🎉 <b>What's up, India?!</b> 🎉",
+        "💥 <b>Hello, Proud Indians!</b> 💥",
+        "🌞 <b>Good Day, India!</b> 🌞",
+        "🌟 <b>Salutations to our Indian Heroes!</b> 🌟",
+        "💪 <b>Hey Bharatvasiyon!</b> 💪"
+    ]
+
+    intro_message = random.choice(greetings) + "\n\n"
     text = f"<b>{data['title']}</b>"
     for date, info in data["events"].items():
-        text += f"\n\n<b><u>{date}</u></b>\n{info}"
+        text += f"\n\n📅 <b><u>{date}</u></b>\n📝 {info}"
+
+    message_to_send = intro_message + text
 
     max_length = 3900
     current_message = ""
 
-    for line in text.split("\n"):
+    for line in message_to_send.split("\n"):
         if len(current_message) + len(line) + 1 > max_length:
-            send_to_telegram(current_message)
+            send_telegram_message(current_message)
             current_message = ""
         current_message += line + "\n"
 
     if current_message:
-        send_to_telegram(current_message)
+        send_telegram_message(current_message)
