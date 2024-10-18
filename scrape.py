@@ -37,11 +37,17 @@ def send_telegram_message(message):
         "text": message,
         "parse_mode": "HTML"
     }
+
+    # Debugging: Print payload
+    print(f"Sending message: {payload}")
+
     try:
         response = requests.post(url, json=payload)
+        response.raise_for_status()
         print(response)
-    except Exception as a:
-        print(a)
+    except requests.exceptions.HTTPError as e:
+        print(f"HTTPError: {e}")
+        print(f"Response Text: {response.text}")
 
 if __name__ == "__main__":
     data = scrape_indianage()
@@ -49,12 +55,11 @@ if __name__ == "__main__":
     india_time = datetime.now(india_timezone)
     today_date_month = f"{india_time.day}_{india_time.month}"
     file_path = f"today_in_history/{today_date_month}.json"
-
     os.makedirs('today_in_history', exist_ok=True)
     with open(file_path, 'w') as json_file:
         json.dump(data, json_file, indent=4)
 
-    text = f"<b><u>{data['title']}</b></u>"
+    text = f"<b><u>{data['title']}</u></b>"
     for date, info in data["events"].items():
         text += f"\n\n<u>{date}</u>\n{info}"
 
@@ -63,9 +68,10 @@ if __name__ == "__main__":
 
     for line in text.split("\n"):
         if len(current_message) + len(line) + 1 > max_length:
-            send_telegram_message(current_message)
+            if current_message.strip():
+                send_telegram_message(current_message)
             current_message = ""
         current_message += line + "\n"
 
-    if current_message:
+    if current_message.strip():
         send_telegram_message(current_message)
