@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import json
 from datetime import datetime
 import pytz
+import os
 
 def scrape_indianage():
     url = "https://www.indianage.com/indian_history"
@@ -24,17 +25,41 @@ def scrape_indianage():
     }
     return data
 
+def send_telegram_message(message):
+    chat_id = os.getenv("CHAT_ID")
+    bot_token = os.getenv("BOT_TOKEN")
+    url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+    payload = {
+        "chat_id": chat_id,
+        "text": message,
+        "parse_mode": "HTML"
+    }
+    response = requests.post(url, json=payload)
+    response.raise_for_status()
+
 if __name__ == "__main__":
     data = scrape_indianage()
     india_timezone = pytz.timezone('Asia/Kolkata')
     india_time = datetime.now(india_timezone)
     today_date_month = f"{india_time.day}_{india_time.month}"
     file_path = f"today_in_history/{today_date_month}.json"
+
+    os.makedirs('today_in_history', exist_ok=True)
     with open(file_path, 'w') as json_file:
         json.dump(data, json_file, indent=4)
 
-    text = data["title"]
+    text = f"<b>{data['title']}</b>"
     for date, info in data["events"].items():
-        text+=f"\n\n<b><u>{date}</b></u>\n{info}"
-    print(text)
-        
+        text += f"\n\n<b><u>{date}</u></b>\n{info}"
+
+    max_length = 3900
+    current_message = ""
+
+    for line in text.split("\n"):
+        if len(current_message) + len(line) + 1 > max_length:
+            send_telegram_message(current_message)
+            current_message = ""
+        current_message += line + "\n"
+
+    if current_message:
+        send_telegram_message(current_message)
