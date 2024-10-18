@@ -25,7 +25,7 @@ jobs:
 
       - name: Run Scraper Script
         run: |
-          python recruitments.py
+          python scrape.py
 
       - name: Commit and Push Changes
         uses: stefanzweifel/git-auto-commit-action@v4
