@@ -38,9 +38,6 @@ def send_telegram_message(message):
         "parse_mode": "HTML"
     }
 
-    # Debugging: Print payload
-    print(f"Sending message: {payload}")
-
     try:
         response = requests.post(url, json=payload)
         response.raise_for_status()
