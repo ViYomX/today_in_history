@@ -2,9 +2,7 @@ name: Scrape IndianAge History
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '30 2 * * *'  # 8 AM IST (Asia/Kolkata)
-
+ 
 jobs:
   scrape:
     runs-on: ubuntu-latest
