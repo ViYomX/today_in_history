@@ -1,8 +1,10 @@
 name: Scrape IndianAge History
 
 on:
+  schedule:
+    - cron: '35 2 * * *'  # This runs the job at 8:05 AM IST (GMT+5:30)
   workflow_dispatch:
- 
+
 jobs:
   scrape:
     runs-on: ubuntu-latest
