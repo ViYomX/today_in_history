@@ -2,7 +2,7 @@ name: Scrape IndianAge History
 
 on:
   schedule:
-    - cron: '40 2 * * *'  # This runs the job at 8:10 AM IST (GMT+5:30)
+    - cron: '40 2 * * *'
   workflow_dispatch:
 
 jobs:
@@ -16,7 +16,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: '3.12.x'
 
       - name: Install Dependencies
         run: |
@@ -38,3 +38,4 @@ jobs:
           repository: .
           commit_user_name: "github-actions[bot]"
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_author: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
