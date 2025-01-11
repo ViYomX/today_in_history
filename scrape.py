@@ -17,11 +17,14 @@ def scrape_indianage():
     title = soup.find('title').text.strip()
     title = title.replace("Today in Indian History - ", "")
     events = {}
+
     for box in soup.find_all('div', class_='timeline_box'):
         date = box.find('div', class_='date').text.strip()
-        date = date.replace("-", "\t")
+        # Extract only the year
+        year = date.split("\t")[-1]
         event = box.find('p').text.strip()
-        events[date] = event
+        events[year] = event
+
     data = {
         "title": title,
         "events": events
@@ -76,4 +79,4 @@ if __name__ == "__main__":
         current_message += line + "\n"
 
     if current_message.strip():
-        send_telegram_message(current_message)
+        #send_telegram_message(current_message)
