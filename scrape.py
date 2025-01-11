@@ -56,10 +56,15 @@ if __name__ == "__main__":
     with open(file_path, 'w') as json_file:
         json.dump(data, json_file, indent=4)
 
-    text = f"<b>{data['title']}</b>"
+    text = f"<b>✨ {data['title']} ✨</b>\n\n"
+    
     for date, info in data["events"].items():
-        text += f"\n\n\n<u>{date}</u>\n{info}"
-
+        text += (
+            f"📜 <b>Date:</b> <u>{date}</u>\n"
+            f"🔸 <b>Highlights:</b>\n"
+            f"{info}\n\n"
+            "──────────\n"
+        )
     max_length = 3900
     current_message = ""
 
