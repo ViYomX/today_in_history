@@ -63,7 +63,7 @@ if __name__ == "__main__":
     
     for date, info in data["events"].items():
         text += (
-            f"📜 <b>Date:</b> <u>{date}</u>\n"
+            f"📜 <b>Year:</b> <u>{date}</u>\n"
             f"🔸 <b>Highlights:</b>\n"
             f"{info}\n\n"
             "──────────\n"
@@ -78,5 +78,5 @@ if __name__ == "__main__":
             current_message = ""
         current_message += line + "\n"
 
-    #if current_message.strip():
-        #send_telegram_message(current_message)
+    if current_message.strip():
+        send_telegram_message(current_message)
