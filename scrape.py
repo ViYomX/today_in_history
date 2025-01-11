@@ -21,7 +21,7 @@ def scrape_indianage():
     for box in soup.find_all('div', class_='timeline_box'):
         date = box.find('div', class_='date').text.strip()
         # Extract only the year
-        year = date.split("\t")[-1]
+        year = date.split("-")[-1]
         event = box.find('p').text.strip()
         events[year] = event
 
