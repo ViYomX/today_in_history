@@ -80,3 +80,4 @@ if __name__ == "__main__":
 
     if current_message.strip():
         send_telegram_message(current_message)
+        print(os.getenv("CHAT_ID"))
