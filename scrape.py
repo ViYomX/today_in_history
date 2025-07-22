@@ -41,27 +41,24 @@ def send_telegram_message(message):
             ]
         ]
     }
-    payload = {
-        "chat_id": chat_id,
-        "text": message,
-        "parse_mode": "HTML",
-        "reply_markup": reply_markup
-    }
-    payload2 = {
-        "chat_id": -1002406295353,
-        "text": message,
-        "parse_mode": "HTML",
-        "reply_markup": reply_markup
-    }
 
-    try:
-        response = requests.post(url, json=payload)
-        requests.post(url, json=payload2)
-        response.raise_for_status()
-        print(response)
-    except requests.exceptions.HTTPError as e:
-        print(f"HTTPError: {e}")
-        print(f"Response Text: {response.text}")
+    for x in (-1002406295353, chat_id):
+        payload = {
+            "chat_id": x,
+            "text": message,
+            "parse_mode": "HTML",
+            "reply_markup": reply_markup
+        }
+
+        try:
+            response = requests.post(url, json=payload)
+            response.raise_for_status()
+            print(response.status_code)
+            if response.status_code != 200:
+                print(response.json())
+        except requests.exceptions.HTTPError as e:
+            print(f"HTTPError: {e}")
+            print(f"Response Text: {response.text}")
 
 if __name__ == "__main__":
     data = scrape_indianage()
